@@ -21,14 +21,23 @@ class Account:
         self.money = money
     
     def deposit(self, amount): #입금
-        money += amount
-  
+        if amount > 0:
+            money += amount
+            print(f"{amount}원이 입금되었습니다.")
+        else:
+            print("입금액이 0보다 커야 합니다.")
+
+
     def withdraw(self, amount): #출금
-        money -= amount
-        if amount > money:
+        if amount <= self.balance:
+            self.balance -= amount
+            print(f"{amount}원이 출금되었습니다.")
+        else:
+            print("잔액이 부족합니다.")
 
 
-   def display_balance(self):
+    def display_balance(self):
+        print(f"{self.owner}님의 현재 잔액은 {self.balance}원 입니다.")
 
 class Bank:
     
@@ -41,12 +50,16 @@ class Bank:
         self.accounts.append(account)
         print(f'{owner}님의 계좌가 생성되었습니다')
 
-#     def get_account(self, owner):
+    def get_account(self, owner):
         for i in self.accounts:
             if i.owner == owner:
-                return account
+                return i
             
-#     def display_accounts:
+    def display_accounts(self):
+        print(f"{self.name}의 모든 계좌 정보:")
+        for account in self.accounts:
+            print(f"소유주: {account.owner}, 잔액: {account.balance}원")
+
 
 def Main():
     bank = Bank()
@@ -55,7 +68,9 @@ def Main():
         print("2. 입금")
         print("3. 출금")
         print("4. 잔액조회")
-        print("5. 종료")
+        print("5. 은행계좌목록")
+        print("6. 종료")
+
 
         a = input()
         if a == '1':
@@ -65,13 +80,22 @@ def Main():
         elif a == '2':
             owner = input('소유주 이름을 입력하세요:')
             account= bank.get_account(owner)
+            if account:
+                amount = int(input("입금할 금액을 입력하세요: "))
+                account.deposit(amount)
             
         elif a == '3':
+            owner = input('소유주 이름을 입력하세요:')
+            account= bank.get_account(owner)
+            if account:
+                amount = int(input("출금할 금액을 입력하세요: "))
+                account.withdraw(amount)
           
         elif a == '4':
-            cmd = input('조회할 계좌명 이름').split()
-            if len(cmd) == 1:
-                number =cmd[0]
-                bank.get_account(number)
+            owner = input('소유주 이름을 입력하세요:')
+            account= bank.get_account(owner)
+            if account:
+                account.display_balace()
 
-    
+        elif a == '5':
+            bank.display_accounts()
